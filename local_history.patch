@@ -1,0 +1,935 @@
+Index: resources/views/auth/passwords/email.blade.php
+===================================================================
+diff --git a/resources/views/auth/passwords/email.blade.php b/resources/views/auth/passwords/email.blade.php
+deleted file mode 100644
+--- a/resources/views/auth/passwords/email.blade.php	
++++ /dev/null	
+@@ -1,47 +0,0 @@
+-@extends('layouts.app')
+-
+-@section('content')
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Reset Password') }}</div>
+-
+-                <div class="card-body">
+-                    @if (session('status'))
+-                        <div class="alert alert-success" role="alert">
+-                            {{ session('status') }}
+-                        </div>
+-                    @endif
+-
+-                    <form method="POST" action="{{ route('password.email') }}">
+-                        @csrf
+-
+-                        <div class="row mb-3">
+-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+-
+-                                @error('email')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-0">
+-                            <div class="col-md-6 offset-md-4">
+-                                <button type="submit" class="btn btn-primary">
+-                                    {{ __('Send Password Reset Link') }}
+-                                </button>
+-                            </div>
+-                        </div>
+-                    </form>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/auth/passwords/reset.blade.php
+===================================================================
+diff --git a/resources/views/auth/passwords/reset.blade.php b/resources/views/auth/passwords/reset.blade.php
+deleted file mode 100644
+--- a/resources/views/auth/passwords/reset.blade.php	
++++ /dev/null	
+@@ -1,65 +0,0 @@
+-@extends('layouts.app')
+-
+-@section('content')
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Reset Password') }}</div>
+-
+-                <div class="card-body">
+-                    <form method="POST" action="{{ route('password.update') }}">
+-                        @csrf
+-
+-                        <input type="hidden" name="token" value="{{ $token }}">
+-
+-                        <div class="row mb-3">
+-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ $email ?? old('email') }}" required autocomplete="email" autofocus>
+-
+-                                @error('email')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+-
+-                                @error('password')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-0">
+-                            <div class="col-md-6 offset-md-4">
+-                                <button type="submit" class="btn btn-primary">
+-                                    {{ __('Reset Password') }}
+-                                </button>
+-                            </div>
+-                        </div>
+-                    </form>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/auth/passwords/confirm.blade.php
+===================================================================
+diff --git a/resources/views/auth/passwords/confirm.blade.php b/resources/views/auth/passwords/confirm.blade.php
+deleted file mode 100644
+--- a/resources/views/auth/passwords/confirm.blade.php	
++++ /dev/null	
+@@ -1,49 +0,0 @@
+-@extends('layouts.app')
+-
+-@section('content')
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Confirm Password') }}</div>
+-
+-                <div class="card-body">
+-                    {{ __('Please confirm your password before continuing.') }}
+-
+-                    <form method="POST" action="{{ route('password.confirm') }}">
+-                        @csrf
+-
+-                        <div class="row mb-3">
+-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+-
+-                                @error('password')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-0">
+-                            <div class="col-md-8 offset-md-4">
+-                                <button type="submit" class="btn btn-primary">
+-                                    {{ __('Confirm Password') }}
+-                                </button>
+-
+-                                @if (Route::has('password.request'))
+-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+-                                        {{ __('Forgot Your Password?') }}
+-                                    </a>
+-                                @endif
+-                            </div>
+-                        </div>
+-                    </form>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/auth/login.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/views/auth/login.blade.php b/resources/views/auth/login.blade.php
+--- a/resources/views/auth/login.blade.php	
++++ b/resources/views/auth/login.blade.php	(date 1670337007229)
+@@ -1,70 +1,0 @@
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Login') }}</div>
+-
+-                <div class="card-body">
+-                    <form method="POST" action="{{ route('login') }}">
+-                        @csrf
+-
+-                        <div class="row mb-3">
+-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
+-
+-                                @error('email')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
+-
+-                                @error('password')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <div class="col-md-6 offset-md-4">
+-                                <div class="form-check">
+-                                    <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
+-
+-                                    <label class="form-check-label" for="remember">
+-                                        {{ __('Remember Me') }}
+-                                    </label>
+-                                </div>
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-0">
+-                            <div class="col-md-8 offset-md-4">
+-                                <button type="submit" class="btn btn-primary">
+-                                    {{ __('Login') }}
+-                                </button>
+-
+-                                @if (Route::has('password.request'))
+-                                    <a class="btn btn-link" href="{{ route('password.request') }}">
+-                                        {{ __('Forgot Your Password?') }}
+-                                    </a>
+-                                @endif
+-                            </div>
+-                        </div>
+-                    </form>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/auth/verify.blade.php
+===================================================================
+diff --git a/resources/views/auth/verify.blade.php b/resources/views/auth/verify.blade.php
+deleted file mode 100644
+--- a/resources/views/auth/verify.blade.php	
++++ /dev/null	
+@@ -1,28 +0,0 @@
+-@extends('layouts.app')
+-
+-@section('content')
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Verify Your Email Address') }}</div>
+-
+-                <div class="card-body">
+-                    @if (session('resent'))
+-                        <div class="alert alert-success" role="alert">
+-                            {{ __('A fresh verification link has been sent to your email address.') }}
+-                        </div>
+-                    @endif
+-
+-                    {{ __('Before proceeding, please check your email for a verification link.') }}
+-                    {{ __('If you did not receive the email') }},
+-                    <form class="d-inline" method="POST" action="{{ route('verification.resend') }}">
+-                        @csrf
+-                        <button type="submit" class="btn btn-link p-0 m-0 align-baseline">{{ __('click here to request another') }}</button>.
+-                    </form>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/auth/register.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/views/auth/register.blade.php b/resources/views/auth/register.blade.php
+--- a/resources/views/auth/register.blade.php	
++++ b/resources/views/auth/register.blade.php	(date 1670337007299)
+@@ -1,74 +1,0 @@
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Register') }}</div>
+-
+-                <div class="card-body">
+-                    <form method="POST" action="{{ route('register') }}">
+-                        @csrf
+-
+-                        <div class="row mb-3">
+-                            <label for="name" class="col-md-4 col-form-label text-md-end">{{ __('Name') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+-
+-                                @error('name')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <label for="email" class="col-md-4 col-form-label text-md-end">{{ __('Email Address') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+-
+-                                @error('email')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+-
+-                                @error('password')
+-                                    <span class="invalid-feedback" role="alert">
+-                                        <strong>{{ $message }}</strong>
+-                                    </span>
+-                                @enderror
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-3">
+-                            <label for="password-confirm" class="col-md-4 col-form-label text-md-end">{{ __('Confirm Password') }}</label>
+-
+-                            <div class="col-md-6">
+-                                <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+-                            </div>
+-                        </div>
+-
+-                        <div class="row mb-0">
+-                            <div class="col-md-6 offset-md-4">
+-                                <button type="submit" class="btn btn-primary">
+-                                    {{ __('Register') }}
+-                                </button>
+-                            </div>
+-                        </div>
+-                    </form>
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/dashboard.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/views/dashboard.blade.php b/resources/views/dashboard.blade.php
+new file mode 100644
+--- /dev/null	(date 1670337007249)
++++ b/resources/views/dashboard.blade.php	(date 1670337007249)
+@@ -0,0 +1,17 @@
++<x-app-layout>
++    <x-slot name="header">
++        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
++            {{ __('Dashboard') }}
++        </h2>
++    </x-slot>
++
++    <div class="py-12">
++        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
++            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
++                <div class="p-6 text-gray-900">
++                    {{ __("You're logged in!") }}
++                </div>
++            </div>
++        </div>
++    </div>
++</x-app-layout>
+Index: resources/views/tasks/edit.blade.php
+===================================================================
+diff --git a/resources/views/tasks/edit.blade.php b/resources/views/tasks/edit.blade.php
+deleted file mode 100644
+--- a/resources/views/tasks/edit.blade.php	
++++ /dev/null	
+@@ -1,19 +0,0 @@
+-<html lang="">
+-@vite(['resources/js/app.js'])
+-<body  class="bg-[#26295E] h-screen w-screen overflow-hidden">
+-<div class="my-12 text-left mx-12">
+-    <h1 class="text-[#D1D7E0] drop-shadow-lg text-5xl font-mono">Edit "{{$task->title}}"</h1>
+-</div>
+-    <form action='{{route('tasks.update',['task' => $task])}}' method="post" class="mx-12">
+-        @csrf
+-        <label class="font-mono text-xl text-[#D1D7E0] font-bold">Title:<br> </label><input type="text" name="title" value="{{$task->title}}" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required/><br/><br/>
+-        <label class="font-mono text-xl text-[#D1D7E0] font-bold">Description:<br></label><textarea type="text" name="description" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required>{{$task->description}}</textarea><br/><br/>
+-        <label class="font-mono text-xl text-[#D1D7E0] font-bold">Reminder:<br></label><input type="datetime-local" name="reminder" value="{{$task->reminder}}" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required/><br/><br/>
+-        <input type="hidden" name="completed" value="{{$task->completed}}">
+-        <button type="submit" class="inline-block align-middle bg-[#2f9693] transition ease-in-out hover:scale-110 my-6 font-mono text-white font-bold rounded-full text-center px-12 py-4">
+-            <span class="text-2xl">Edit</span>
+-            <i class="fa fa-send-o scale-150 ml-2 font-size-20"></i>
+-        </button>
+-    </form>
+-</body>
+-</html>
+Index: resources/views/tasks/index.blade.php
+===================================================================
+diff --git a/resources/views/tasks/index.blade.php b/resources/views/tasks/index.blade.php
+deleted file mode 100644
+--- a/resources/views/tasks/index.blade.php	
++++ /dev/null	
+@@ -1,79 +0,0 @@
+-<html lang="">
+-<body class="bg-[#26295e] h-screen w-screen overflow-auto">
+-@vite(['resources/js/app.js'])
+-<?php
+-    use Carbon\Carbon;
+-    ?>
+-<h1 class="mx-10 my-6 text-2xl text-[#D1D7E0] font-mono font-bold">{{count($tasks)-count($tasksCompleted)}} due tasks
+-    <br>
+-    {{count($tasksCompleted)}} completed tasks
+-</h1>
+-
+-    <ul class="grid grid-cols-3 gap-2">
+-        @foreach($tasks as $task)
+-            <div class="{{$task->completed ?'bg-green-500':'bg-[#D1D7E0]'}} mx-6 drop-shadow-lg rounded-lg">
+-                <a href="{{route('tasks.edit',['task'=>$task])}}" class="absolute mx-2 my-2">
+-                    <img src="{{asset('/images/edit-button.png')}}" alt="Edit" class="w-8 h-8">
+-                </a>
+-                <div class="mx-4 ">
+-                    <li class="text-center font-mono font-bold">{{$task->title}}</li>
+-                    <div class="overflow-auto h-28 my-6">
+-                        <li class="text-left font-mono my-6">{{$task->description}}</li>
+-                    </div>
+-                    <li class="font-mono font-bold">Due: {{Carbon::parse($task->reminder)->isoFormat('LLL')}}<br>({{Carbon::parse($task->reminder)->diffForHumans(Carbon::now())}} today)</li>
+-
+-                    <br>
+-                    <br>
+-                    <div class="overflow-auto h-28">
+-                        @foreach($task->subTasks as $subTask)
+-                            <div class="flex">
+-                                <form action="{{route('subTasks.toggleComplete',['subTask'=>$subTask,'task'=>$task])}}" method="post">
+-                                    @csrf
+-                                    <input class="h-0 w-0" type="hidden" name="task_id" value="{{$task->id}}">
+-                                    <input class="h-0 w-0" type="hidden" name="description" value="{{$subTask->description}}">
+-                                    <input class="h-0 w-0" type="hidden" name="completed" value="{{$subTask->completed ? 0:1}}">
+-                                    <button type="submit" class="rounded-lg px-6 text-white {{$subTask->completed ? 'bg-green-500' : 'bg-gray-500'}}">{{$subTask->description}}</button>
+-                                </form>
+-                                <form action="{{route('subTasks.destroy',['subTask'=>$subTask])}}" method="post">
+-                                    @csrf
+-                                    @method("DELETE")
+-                                    <button type="submit"><img src="{{asset('/images/delete-512.png')}}" alt="Delete" class="w-6 h-6"></button>
+-                                </form>
+-                            </div>
+-                        @endforeach
+-                    </div>
+-                        <form action="{{route('subTasks.store')}}" method="post">
+-                            @csrf
+-                            <input class="h-0 w-0" type="text" name="task_id" value="{{$task->id}}">
+-                            <input type="text" name="description">
+-                            <input class="w-0 h-0" type="text" name="completed" value="0">
+-                            <button type="submit"></button>
+-                        </form>
+-                    <br>
+-                    <div class="grid grid-cols-2 gap-16">
+-                        <form action="{{route('tasks.destroy',['task'=>$task])}}" method="post">
+-                            @csrf
+-                            @method("DELETE")
+-                            <button type="submit"><img src="{{asset('/images/delete-512.png')}}" alt="Delete" class="w-8 h-8"></button>
+-                        </form>
+-                        <form action='{{route('tasks.update',['task' => $task])}}' method="post">
+-                            @csrf
+-                            <div class="text-right">
+-                                <button type="submit" class="">
+-                                    <img class="w-8 h-8" src="{{$task->completed ? asset('/images/check-white.png') : asset('images/check-green.png')}}">
+-                                </button>
+-                            </div>
+-                            <input class="w-0 h-0" type="hidden" name="title" value="{{$task->title}}"/>
+-                            <input class="w-0 h-0" type="hidden" name="description" value="{{$task->description}}"/>
+-                            <input class="w-0 h-0" type="hidden" name="reminder" value="{{$task->reminder}}"/>
+-                            <input class="w-0 h-0" type="hidden" name="completed" value="{{$task->completed ? 0:1}}">
+-
+-                        </form>
+-
+-                    </div>
+-                </div>
+-            </div>
+-        @endforeach
+-    </ul>
+-</body>
+-</html>
+Index: resources/views/tasks/create.blade.php
+===================================================================
+diff --git a/resources/views/tasks/create.blade.php b/resources/views/tasks/create.blade.php
+deleted file mode 100644
+--- a/resources/views/tasks/create.blade.php	
++++ /dev/null	
+@@ -1,26 +0,0 @@
+-<html lang="">
+-<head>
+-    <title>CreateToDo</title>
+-    @vite(['resources/js/app.js'])
+-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+-</head>
+-<body class="bg-[#26295E] h-screen w-screen overflow-hidden">
+-<div class="">
+-    <div class="my-12 text-left mx-12">
+-        <h1 class="text-[#D1D7E0] drop-shadow-lg text-5xl font-mono">Create a new Task</h1>
+-    </div>
+-    <div class="">
+-        <form action='{{route('tasks.store')}}' method="POST" class="mx-12">
+-            @csrf
+-            <label class="font-mono text-xl text-[#D1D7E0] font-bold">Title:<br/> </label><input type="text" name="title" placeholder="Title" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required/><br/><br/>
+-            <label class="font-mono text-xl text-[#D1D7E0] font-bold">Description:</label> <br><textarea type="text" name="description" placeholder="Description" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required></textarea><br/><br/>
+-            <label class="font-mono text-xl text-[#D1D7E0] font-bold">Date of reminder(leave blank for no reminder): </label><br><input type="datetime-local" name="reminder" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required/><br/><br/>
+-            <button type="submit" class="inline-block align-middle bg-[#2f9693] transition ease-in-out hover:scale-110 my-6 font-mono text-white font-bold rounded-full text-center px-12 py-4">
+-                <span class="text-2xl">Create</span>
+-                <i class="fa fa-send-o scale-150 ml-2 font-size-20"></i>
+-            </button>
+-        </form>
+-    </div>
+-</div>
+-</body>
+-</html>
+Index: resources/views/layouts/app.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/views/layouts/app.blade.php b/resources/views/layouts/app.blade.php
+--- a/resources/views/layouts/app.blade.php	
++++ b/resources/views/layouts/app.blade.php	(date 1670337007259)
+@@ -1,80 +1,0 @@
+-<!doctype html>
+-<html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
+-<head>
+-    <meta charset="utf-8">
+-    <meta name="viewport" content="width=device-width, initial-scale=1">
+-
+-    <!-- CSRF Token -->
+-    <meta name="csrf-token" content="{{ csrf_token() }}">
+-
+-    <title>{{ config('app.name', 'Laravel') }}</title>
+-
+-    <!-- Fonts -->
+-    <link rel="dns-prefetch" href="//fonts.gstatic.com">
+-    <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
+-
+-    <!-- Scripts -->
+-
+-</head>
+-<body>
+-    <div id="app">
+-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
+-            <div class="container">
+-                <a class="navbar-brand" href="{{ url('/') }}">
+-                    {{ config('app.name', 'Laravel') }}
+-                </a>
+-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
+-                    <span class="navbar-toggler-icon"></span>
+-                </button>
+-
+-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+-                    <!-- Left Side Of Navbar -->
+-                    <ul class="navbar-nav me-auto">
+-
+-                    </ul>
+-
+-                    <!-- Right Side Of Navbar -->
+-                    <ul class="navbar-nav ms-auto">
+-                        <!-- Authentication Links -->
+-                        @guest
+-                            @if (Route::has('login'))
+-                                <li class="nav-item">
+-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+-                                </li>
+-                            @endif
+-
+-                            @if (Route::has('register'))
+-                                <li class="nav-item">
+-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+-                                </li>
+-                            @endif
+-                        @else
+-                            <li class="nav-item dropdown">
+-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+-                                    {{ Auth::user()->name }}
+-                                </a>
+-
+-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+-                                    <a class="dropdown-item" href="{{ route('logout') }}"
+-                                       onclick="event.preventDefault();
+-                                                     document.getElementById('logout-form').submit();">
+-                                        {{ __('Logout') }}
+-                                    </a>
+-
+-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
+-                                        @csrf
+-                                    </form>
+-                                </div>
+-                            </li>
+-                        @endguest
+-                    </ul>
+-                </div>
+-            </div>
+-        </nav>
+-
+-        <main class="py-4">
+-            @yield('content')
+-        </main>
+-    </div>
+-</body>
+-</html>
+Index: resources/views/layouts/navigation.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/views/layouts/navigation.blade.php b/resources/views/layouts/navigation.blade.php
+new file mode 100644
+--- /dev/null	(date 1670337007299)
++++ b/resources/views/layouts/navigation.blade.php	(date 1670337007299)
+@@ -0,0 +1,100 @@
++<nav x-data="{ open: false }" class="bg-white border-b border-gray-100">
++    <!-- Primary Navigation Menu -->
++    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
++        <div class="flex justify-between h-16">
++            <div class="flex">
++                <!-- Logo -->
++                <div class="shrink-0 flex items-center">
++                    <a href="{{ route('dashboard') }}">
++                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
++                    </a>
++                </div>
++
++                <!-- Navigation Links -->
++                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
++                    <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
++                        {{ __('Dashboard') }}
++                    </x-nav-link>
++                </div>
++            </div>
++
++            <!-- Settings Dropdown -->
++            <div class="hidden sm:flex sm:items-center sm:ml-6">
++                <x-dropdown align="right" width="48">
++                    <x-slot name="trigger">
++                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-gray-500 bg-white hover:text-gray-700 focus:outline-none transition ease-in-out duration-150">
++                            <div>{{ Auth::user()->name }}</div>
++
++                            <div class="ml-1">
++                                <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
++                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
++                                </svg>
++                            </div>
++                        </button>
++                    </x-slot>
++
++                    <x-slot name="content">
++                        <x-dropdown-link :href="route('profile.edit')">
++                            {{ __('Profile') }}
++                        </x-dropdown-link>
++
++                        <!-- Authentication -->
++                        <form method="POST" action="{{ route('logout') }}">
++                            @csrf
++
++                            <x-dropdown-link :href="route('logout')"
++                                    onclick="event.preventDefault();
++                                                this.closest('form').submit();">
++                                {{ __('Log Out') }}
++                            </x-dropdown-link>
++                        </form>
++                    </x-slot>
++                </x-dropdown>
++            </div>
++
++            <!-- Hamburger -->
++            <div class="-mr-2 flex items-center sm:hidden">
++                <button @click="open = ! open" class="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100 focus:outline-none focus:bg-gray-100 focus:text-gray-500 transition duration-150 ease-in-out">
++                    <svg class="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
++                        <path :class="{'hidden': open, 'inline-flex': ! open }" class="inline-flex" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
++                        <path :class="{'hidden': ! open, 'inline-flex': open }" class="hidden" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
++                    </svg>
++                </button>
++            </div>
++        </div>
++    </div>
++
++    <!-- Responsive Navigation Menu -->
++    <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
++        <div class="pt-2 pb-3 space-y-1">
++            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
++                {{ __('Dashboard') }}
++            </x-responsive-nav-link>
++        </div>
++
++        <!-- Responsive Settings Options -->
++        <div class="pt-4 pb-1 border-t border-gray-200">
++            <div class="px-4">
++                <div class="font-medium text-base text-gray-800">{{ Auth::user()->name }}</div>
++                <div class="font-medium text-sm text-gray-500">{{ Auth::user()->email }}</div>
++            </div>
++
++            <div class="mt-3 space-y-1">
++                <x-responsive-nav-link :href="route('profile.edit')">
++                    {{ __('Profile') }}
++                </x-responsive-nav-link>
++
++                <!-- Authentication -->
++                <form method="POST" action="{{ route('logout') }}">
++                    @csrf
++
++                    <x-responsive-nav-link :href="route('logout')"
++                            onclick="event.preventDefault();
++                                        this.closest('form').submit();">
++                        {{ __('Log Out') }}
++                    </x-responsive-nav-link>
++                </form>
++            </div>
++        </div>
++    </div>
++</nav>
+Index: resources/views/vendors/edit.blade.php
+===================================================================
+diff --git a/resources/views/vendors/edit.blade.php b/resources/views/vendors/edit.blade.php
+deleted file mode 100644
+--- a/resources/views/vendors/edit.blade.php	
++++ /dev/null	
+@@ -1,7 +0,0 @@
+-PAGINA DE EDIT
+-<form action="{{route('vendors.update', ['vendor' => $vendor])}}" method='post'>
+-    @csrf
+-    <input type="text" name="name" value="{{$vendor->name}}"/>
+-    <input type="text" name="email" value="{{$vendor->email}}"/>
+-    <button type="submit">Save</button>
+-</form>
+Index: resources/views/vendors/index.blade.php
+===================================================================
+diff --git a/resources/views/vendors/index.blade.php b/resources/views/vendors/index.blade.php
+deleted file mode 100644
+--- a/resources/views/vendors/index.blade.php	
++++ /dev/null	
+@@ -1,25 +0,0 @@
+-<html>
+-
+-<h1>{{count($vendors)}}</h1>
+-@foreach($vendors as $vendor)
+-    <ul>
+-        <a href="{{route('vendors.edit', ['vendor' => $vendor])}}">
+-        <li>
+-            <div style="display: flex; flex-direction: column;">
+-                <div>
+-                    <p>{{$vendor->name}}</p>
+-                    <p>{{$vendor->email}}</p>
+-                </div>
+-
+-            </div>
+-        </a>
+-            <form action="{{route("vendors.destroy", ['vendor' => $vendor])}}" method="POST">
+-                @csrf
+-                @method("DELETE")
+-                <button type="submit">STERGE</button>
+-            </form>
+-        </li>
+-    </ul>
+-@endforeach
+-
+-</html>
+Index: resources/views/vendors/create.blade.php
+===================================================================
+diff --git a/resources/views/vendors/create.blade.php b/resources/views/vendors/create.blade.php
+deleted file mode 100644
+--- a/resources/views/vendors/create.blade.php	
++++ /dev/null	
+@@ -1,6 +0,0 @@
+-<form action='{{route('vendors.store')}}' method='post'>
+-    @csrf
+-    <input type="text" name="name"/>
+-    <input type="text" name="email"/>
+-    <button type="submit">Save</button>
+-</form>
+Index: resources/views/home.blade.php
+===================================================================
+diff --git a/resources/views/home.blade.php b/resources/views/home.blade.php
+deleted file mode 100644
+--- a/resources/views/home.blade.php	
++++ /dev/null	
+@@ -1,23 +0,0 @@
+-@extends('layouts.app')
+-
+-@section('content')
+-<div class="container">
+-    <div class="row justify-content-center">
+-        <div class="col-md-8">
+-            <div class="card">
+-                <div class="card-header">{{ __('Dashboard') }}</div>
+-
+-                <div class="card-body">
+-                    @if (session('status'))
+-                        <div class="alert alert-success" role="alert">
+-                            {{ session('status') }}
+-                        </div>
+-                    @endif
+-
+-                    {{ __('You are logged in!') }}
+-                </div>
+-            </div>
+-        </div>
+-    </div>
+-</div>
+-@endsection
+Index: resources/views/welcome.blade.php
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/resources/views/welcome.blade.php b/resources/views/welcome.blade.php
+--- a/resources/views/welcome.blade.php	
++++ b/resources/views/welcome.blade.php	(date 1670337007269)
+@@ -1,26 +1,17 @@
+-<!DOCTYPE html>
+-<html lang="">
+-
+-<head>
+-    <title>Todo App</title>
+-    @vite(['resources/js/app.js'])
+-</head>
++<x-app-layout>
++    <x-slot name="header">
++        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
++            {{ __('Dashboard') }}
++        </h2>
++    </x-slot>
+ 
+-<body class="bg-[#26295e] h-screen w-screen overflow-hidden">
+-
+-    <div class="my-12 text-center">
+-        <p class="text-[#D1D7E0] underline decoration-[#2f9693] underline-offset-8 drop-shadow-lg text-7xl font-mono -my-4">Todo app</p>
+-    </div>
+-    <div class="grid grid-cols-2 gap-80 content-start">
+-
+-        <a href="{{route('tasks.create')}}" class="bg-gradient-to-br from-[#2f9693] to-[#802BB1] transition ease-in-out hover:scale-110 my-20 text-white font-bold rounded-full py-6 text-center mx-28">
+-            Create Task
+-        </a>
+-
+-        <a href="{{route('tasks.index')}}" class="bg-gradient-to-br from-[#2f9693] to-[#802BB1] transition ease-in-out hover:scale-110 my-20 text-white font-bold rounded-full py-6 text-center mx-28">
+-            View All Tasks
+-        </a>
++    <div class="py-12">
++        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
++            <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg">
++                <div class="p-6 text-gray-900">
++                    {{ __("You're logged in!") }}
++                </div>
++            </div>
++        </div>
+     </div>
+-</body>
+-
+-</html>
++</x-app-layout>
+diff --git a/resources/views/auth/verify-email.blade.php b/resources/views/auth/verify-email.blade.php
+new file mode 100644
+diff --git a/resources/views/auth/reset-password.blade.php b/resources/views/auth/reset-password.blade.php
+new file mode 100644
+diff --git a/resources/views/auth/forgot-password.blade.php b/resources/views/auth/forgot-password.blade.php
+new file mode 100644
+diff --git a/resources/views/auth/confirm-password.blade.php b/resources/views/auth/confirm-password.blade.php
+new file mode 100644
+diff --git a/resources/views/profile/partials/delete-user-form.blade.php b/resources/views/profile/partials/delete-user-form.blade.php
+new file mode 100644
+diff --git a/resources/views/profile/partials/update-password-form.blade.php b/resources/views/profile/partials/update-password-form.blade.php
+new file mode 100644
+diff --git a/resources/views/profile/partials/update-profile-information-form.blade.php b/resources/views/profile/partials/update-profile-information-form.blade.php
+new file mode 100644
+diff --git a/resources/views/profile/edit.blade.php b/resources/views/profile/edit.blade.php
+new file mode 100644
+diff --git a/resources/views/components/modal.blade.php b/resources/views/components/modal.blade.php
+new file mode 100644
+diff --git a/resources/views/components/dropdown.blade.php b/resources/views/components/dropdown.blade.php
+new file mode 100644
+diff --git a/resources/views/components/nav-link.blade.php b/resources/views/components/nav-link.blade.php
+new file mode 100644
+diff --git a/resources/views/components/auth-card.blade.php b/resources/views/components/auth-card.blade.php
+new file mode 100644
+diff --git a/resources/views/components/text-input.blade.php b/resources/views/components/text-input.blade.php
+new file mode 100644
+diff --git a/resources/views/components/input-error.blade.php b/resources/views/components/input-error.blade.php
+new file mode 100644
+diff --git a/resources/views/components/input-label.blade.php b/resources/views/components/input-label.blade.php
+new file mode 100644
+diff --git a/resources/views/components/danger-button.blade.php b/resources/views/components/danger-button.blade.php
+new file mode 100644
+diff --git a/resources/views/components/dropdown-link.blade.php b/resources/views/components/dropdown-link.blade.php
+new file mode 100644
+diff --git a/resources/views/components/primary-button.blade.php b/resources/views/components/primary-button.blade.php
+new file mode 100644
+diff --git a/resources/views/components/application-logo.blade.php b/resources/views/components/application-logo.blade.php
+new file mode 100644
+diff --git a/resources/views/components/secondary-button.blade.php b/resources/views/components/secondary-button.blade.php
+new file mode 100644
+diff --git a/resources/views/components/auth-session-status.blade.php b/resources/views/components/auth-session-status.blade.php
+new file mode 100644
+diff --git a/resources/views/components/responsive-nav-link.blade.php b/resources/views/components/responsive-nav-link.blade.php
+new file mode 100644
+diff --git a/resources/views/layouts/guest.blade.php b/resources/views/layouts/guest.blade.php
+new file mode 100644
