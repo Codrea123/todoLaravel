@@ -3,9 +3,6 @@
     @vite('resources/css/app.css')
     <title>Login</title>
 </head>
-<h1>
-    {{Auth::check()? Auth::user()->name:'Nu esti logat'}}
-</h1>
 <div class="">
     <div class="">
         <div class="">

@@ -10,6 +10,7 @@
 
     <h1 class="font-mono text-xl text-[#D1D7E0]">You are logged in as: {{Auth::user()->name}}</h1>
 
+        <button onclick="{{Auth::guard('web')->logout()}} window.location.reload()">Log Out</button>
     <div class="my-12 text-center">
         <p class="text-[#D1D7E0] underline decoration-[#2f9693] underline-offset-8 drop-shadow-lg text-7xl font-mono -my-4">Todo app</p>
     </div>
