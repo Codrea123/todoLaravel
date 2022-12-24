@@ -57,17 +57,14 @@
                             @method("DELETE")
                             <button type="submit"><img src="{{asset('/images/delete-512.png')}}" alt="Delete" class="w-8 h-8"></button>
                         </form>
-                        <form action='{{route('tasks.update',['task' => $task])}}' method="post">
+                        <form action='{{route('tasks.toggle',['task' => $task])}}' method="post">
                             @csrf
                             <div class="text-right">
                                 <button type="submit" class="">
                                     <img class="w-8 h-8" src="{{$task->completed ? asset('/images/check-white.png') : asset('images/check-green.png')}}">
                                 </button>
                             </div>
-                            <input type="hidden" name="user_id" value="{{Auth::id()}}">
-                            <input class="w-0 h-0" type="hidden" name="title" value="{{$task->title}}"/>
-                            <input class="w-0 h-0" type="hidden" name="description" value="{{$task->description}}"/>
-                            <input class="w-0 h-0" type="hidden" name="reminder" value="{{$task->reminder}}"/>
+                            <input type="hidden" name="toggle" value="1">
                             <input class="w-0 h-0" type="hidden" name="completed" value="{{$task->completed ? 0:1}}">
 
                         </form>

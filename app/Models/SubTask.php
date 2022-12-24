@@ -14,4 +14,8 @@ class SubTask extends Model
         'description',
         'completed'
     ];
+
+    public function task() {
+        return $this->belongsTo(Task::class, 'task_id');
+    }
 }

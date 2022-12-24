@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class TaskRequest extends FormRequest
 {
@@ -26,15 +27,21 @@ class TaskRequest extends FormRequest
         return [
             'user_id'=>[
                 'int',
-                'required'
+                Rule::requiredIf(function () {
+                    return $this->get('toggle') == null;
+                })
             ],
             'title'=>[
                 'string',
-                'required'
+                Rule::requiredIf(function () {
+                    return $this->get('toggle') == null;
+                })
             ],
             'description'=>[
                 'string',
-                'required'
+                Rule::requiredIf(function () {
+                    return $this->get('toggle') == null;
+                })
             ],
             'reminder'=>[
                 'date'

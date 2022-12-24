@@ -8,17 +8,18 @@ use App\Models\subTask;
 use App\Models\Task;
 use App\Models\User;
 use App\Models\Vendor;
+use Illuminate\Contracts\Auth\Authenticatable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    public function index(){
-        $id = Auth::id();
-        $tasks = Task::orderBy('reminder','asc')->get()->sortBy('completed',0)->where('user_id',$id);
-        $tasksCompleted = Task::all()->where('completed',1);
+    public function index(Authenticatable $authenticatable) {
+        $tasks = Task::orderBy('reminder','asc')->get()->sortBy('completed',0)->where('user_id',$authenticatable->getAuthIdentifier());
+        $tasksCompleted = Task::with('user')->where('user_id', $authenticatable->getAuthIdentifier())->where('completed', 1)->get();
         return view('tasks.index')->with([
-            'tasks'=>$tasks,
+            'tasks' => $tasks,
             'tasksCompleted'=>$tasksCompleted
         ]);
     }
@@ -54,6 +55,11 @@ class TaskController extends Controller
         return redirect()->route('tasks.index');
     }
 
+    public function toggleCompleted(TaskRequest $request, Task $task) {
+        $task->completed = $request->get('completed');
+        $task->update();
+        return redirect()->back();
+    }
     public function destroy(Task $task){
         $task->delete();
         return redirect()->back();
