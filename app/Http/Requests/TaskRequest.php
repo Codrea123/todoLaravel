@@ -24,6 +24,10 @@ class TaskRequest extends FormRequest
     public function rules()
     {
         return [
+            'user_id'=>[
+                'int',
+                'required'
+            ],
             'title'=>[
                 'string',
                 'required'

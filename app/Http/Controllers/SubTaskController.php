@@ -10,7 +10,7 @@ use App\Models\Task;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 
-class subTaskController extends Controller
+class SubTaskController extends Controller
 {
     public function index(){
         $subTasks = subTask::all();

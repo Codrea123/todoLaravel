@@ -6,6 +6,7 @@
 </div>
     <form action='{{route('tasks.update',['task' => $task])}}' method="post" class="mx-12">
         @csrf
+        <input type="hidden" name="user_id" value="{{Auth::id()}}">
         <label class="font-mono text-xl text-[#D1D7E0] font-bold">Title:<br> </label><input type="text" name="title" value="{{$task->title}}" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required/><br/><br/>
         <label class="font-mono text-xl text-[#D1D7E0] font-bold">Description:<br></label><textarea type="text" name="description" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required>{{$task->description}}</textarea><br/><br/>
         <label class="font-mono text-xl text-[#D1D7E0] font-bold">Reminder:<br></label><input type="datetime-local" name="reminder" value="{{$task->reminder}}" class="bg-gray-500 font-mono text-xl text-[#ffffff] font-bold" required/><br/><br/>

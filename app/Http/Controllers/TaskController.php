@@ -6,13 +6,16 @@ use App\Http\Requests\TaskRequest;
 use App\Http\Requests\VendorRequest;
 use App\Models\subTask;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class TaskController extends Controller
 {
     public function index(){
-        $tasks = Task::orderBy('reminder','asc')->get()->sortBy('completed',0);
+        $id = Auth::id();
+        $tasks = Task::orderBy('reminder','asc')->get()->sortBy('completed',0)->where('user_id',$id);
         $tasksCompleted = Task::all()->where('completed',1);
         return view('tasks.index')->with([
             'tasks'=>$tasks,
@@ -27,6 +30,7 @@ class TaskController extends Controller
 
     public function store(TaskRequest $request){
         $task = new Task();
+        $task->user_id = $request->get('user_id');
         $task->title = $request->get('title');
         $task->description = $request->get('description');
         $task->reminder = $request->get('reminder');
@@ -41,6 +45,7 @@ class TaskController extends Controller
     }
 
     public function update(TaskRequest $request,Task $task){
+        $task->user_id = $request->get('user_id');
         $task->title = $request->get('title');
         $task->description = $request->get('description');
         $task->reminder = $request->get('reminder');

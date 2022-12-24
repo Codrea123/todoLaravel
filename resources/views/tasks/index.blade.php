@@ -1,5 +1,5 @@
 <html lang="">
-<body class="bg-[#26295e] h-screen w-screen overflow-y-auto">
+<body class="bg-[#26295e] h-screen w-screen overflow-y-hidden">
 @vite(['resources/css/app.css'])
 <?php
     use Carbon\Carbon;
@@ -10,7 +10,7 @@
 </h1>
 
     <ul class="grid grid-cols-3 gap-2">
-        @foreach(Auth::user()->id->$tasks as $task)
+        @foreach($tasks as $task)
             <div class="{{$task->completed ?'bg-green-500':'bg-[#D1D7E0]'}} mx-6 drop-shadow-lg rounded-lg">
                 <a href="{{route('tasks.edit',['task'=>$task])}}" class="absolute mx-2 my-2">
                     <img src="{{asset('/images/edit-button.png')}}" alt="Edit" class="w-8 h-8">
@@ -29,6 +29,7 @@
                             <div class="flex">
                                 <form action="{{route('subTasks.toggleComplete',['subTask'=>$subTask,'task'=>$task])}}" method="post">
                                     @csrf
+                                    <input class="h-0 w-0" type="hidden" name="user_id" value="{{Auth::id()}}">
                                     <input class="h-0 w-0" type="hidden" name="task_id" value="{{$task->id}}">
                                     <input class="h-0 w-0" type="hidden" name="description" value="{{$subTask->description}}">
                                     <input class="h-0 w-0" type="hidden" name="completed" value="{{$subTask->completed ? 0:1}}">
@@ -44,9 +45,9 @@
                     </div>
                         <form action="{{route('subTasks.store')}}" method="post">
                             @csrf
-                            <input class="h-0 w-0" type="text" name="task_id" value="{{$task->id}}">
+                            <input class="h-0 w-0" type="hidden" name="task_id" value="{{$task->id}}">
                             <input type="text" name="description">
-                            <input class="w-0 h-0" type="text" name="completed" value="0">
+                            <input class="w-0 h-0" type="hidden" name="completed" value="0">
                             <button type="submit"></button>
                         </form>
                     <br>
@@ -63,6 +64,7 @@
                                     <img class="w-8 h-8" src="{{$task->completed ? asset('/images/check-white.png') : asset('images/check-green.png')}}">
                                 </button>
                             </div>
+                            <input type="hidden" name="user_id" value="{{Auth::id()}}">
                             <input class="w-0 h-0" type="hidden" name="title" value="{{$task->title}}"/>
                             <input class="w-0 h-0" type="hidden" name="description" value="{{$task->description}}"/>
                             <input class="w-0 h-0" type="hidden" name="reminder" value="{{$task->reminder}}"/>

@@ -8,9 +8,15 @@
 
 <body class="bg-[#26295e] h-screen w-screen overflow-hidden">
 
-    <h1 class="font-mono text-xl text-[#D1D7E0]">You are logged in as: {{Auth::user()->name}}</h1>
+    <h1 class="font-mono text-xl text-[#D1D7E0]">{{auth()->check() ? "You are logged in":"Not logged in"}}</h1>
+    @auth
 
-        <button onclick="{{Auth::guard('web')->logout()}} window.location.reload()">Log Out</button>
+        <form action="post" action="{{route('logout')}}">
+            @csrf
+            <button type="submit">Log Out</button>
+
+        </form>
+    @endauth
     <div class="my-12 text-center">
         <p class="text-[#D1D7E0] underline decoration-[#2f9693] underline-offset-8 drop-shadow-lg text-7xl font-mono -my-4">Todo app</p>
     </div>

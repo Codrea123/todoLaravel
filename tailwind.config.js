@@ -13,6 +13,9 @@ module.exports = {
             fontFamily: {
                 sans: ['Nunito', ...defaultTheme.fontFamily.sans],
             },
+            backgroundImage: {
+                'bgRegister': "url('/public/images/bg.jpg')",
+            }
         },
     },
 
