@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -47,4 +46,15 @@ class User extends Authenticatable
         return $this->hasMany(Task::class);
     }
 
+    public function completedTasks(){
+        return Task::with('user')->where('user_id', $this->id)->where('completed', 1)->get()->count();
+    }
+
+    public function dueTasks(){
+        return Task::with('user')->where('user_id', $this->id)->where('completed', 0)->get()->count();
+    }
+
+    public function categories(){
+        return $this->hasMany(Category::class);
+    }
 }

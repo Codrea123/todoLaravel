@@ -1,10 +1,5 @@
-<html lang="">
-<head>
-    <title>CreateToDo</title>
-    @vite(['resources/css/app.css'])
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-</head>
-<body class="bg-[#26295E] h-screen w-screen overflow-hidden">
+@extends('layouts.app')
+@section('content')
 <div class="">
     <div class="my-12 text-left mx-12">
         <h1 class="text-[#D1D7E0] drop-shadow-lg text-5xl font-mono">Create a new Task</h1>
@@ -23,5 +18,4 @@
         </form>
     </div>
 </div>
-</body>
-</html>
+@endsection

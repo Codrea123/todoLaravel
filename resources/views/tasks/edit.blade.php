@@ -1,6 +1,5 @@
-<html lang="">
-@vite(['resources/css/app.css'])
-<body  class="bg-[#26295E] h-screen w-screen overflow-hidden">
+@extends('layouts.app')
+@section('content')
 <div class="my-12 text-left mx-12">
     <h1 class="text-[#D1D7E0] drop-shadow-lg text-5xl font-mono">Edit "{{$task->title}}"</h1>
 </div>
@@ -16,5 +15,4 @@
             <i class="fa fa-send-o scale-150 ml-2 font-size-20"></i>
         </button>
     </form>
-</body>
-</html>
+@endsection

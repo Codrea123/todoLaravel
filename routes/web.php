@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\VendorController;
@@ -36,6 +37,16 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{task}',[TaskController::class, 'update'])->name('tasks.update');
         Route::delete('delete/{task}',[TaskController::class, 'destroy'])->name('tasks.destroy');
         Route::post('toggle/{task}', [TaskController::class ,'toggleCompleted'])->name('tasks.toggle');
+        Route::post('change-category/{task}', [TaskController::class ,'changeCategory'])->name('tasks.changeCategory');
+    });
+
+    Route::prefix('/categories')->group(function () {
+        Route::get('index',[CategoryController::class, 'index'])->name('categories.index');
+        Route::get('create',[CategoryController::class, 'create'])->name('categories.create');
+        Route::post('store',[CategoryController::class, 'store'])->name('categories.store');
+        Route::get('edit/{category}',[CategoryController::class, 'edit'])->name('categories.edit');
+        Route::post('update/{category}',[CategoryController::class, 'update'])->name('categories.update');
+        Route::delete('delete/{category}',[CategoryController::class, 'destroy'])->name('categories.destroy');
     });
 
 });

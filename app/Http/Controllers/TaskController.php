@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Fetchers\TaskFetcher;
 use App\Http\Requests\TaskRequest;
 use App\Http\Requests\VendorRequest;
+use App\Models\Category;
 use App\Models\subTask;
 use App\Models\Task;
 use App\Models\User;
@@ -15,12 +17,20 @@ use Illuminate\Support\Facades\DB;
 
 class TaskController extends Controller
 {
-    public function index(Authenticatable $authenticatable) {
-        $tasks = Task::orderBy('reminder','asc')->get()->sortBy('completed',0)->where('user_id',$authenticatable->getAuthIdentifier());
-        $tasksCompleted = Task::with('user')->where('user_id', $authenticatable->getAuthIdentifier())->where('completed', 1)->get();
+    protected TaskFetcher $taskFetcher;
+    public function __construct(TaskFetcher $taskFetcher)
+    {
+        $this->taskFetcher = $taskFetcher;
+    }
+
+    public function index(Authenticatable $authenticatable, Request $request) {
+        $tasks = $this->taskFetcher->getFilteredTasks($request->all());
+        $tasksCompleted = $this->taskFetcher->getCompletedTasks();
         return view('tasks.index')->with([
             'tasks' => $tasks,
-            'tasksCompleted'=>$tasksCompleted
+            'tasksCompleted'=>$tasksCompleted,
+            'categories' => $authenticatable->categories,
+            'category' => Category::where('id', $request->get('category_id'))->first()
         ]);
     }
 
@@ -64,5 +74,9 @@ class TaskController extends Controller
         $task->delete();
         return redirect()->back();
     }
-
+    public function changeCategory(Request $request, Task $task) {
+        $task->category_id = $request->get('category_id');
+        $task->update();
+        return response()->json(['success' => 'Category changed successfully']);
+    }
 }

@@ -1,13 +1,5 @@
-<!DOCTYPE html>
-<html lang="">
-
-<head>
-    <title>Todo App</title>
-    @vite(['resources/css/app.css'])
-</head>
-
-<body class="bg-[#26295e] h-screen w-screen overflow-hidden">
-
+@extends('layouts.app')
+@section('content')
     <h1 class="font-mono text-xl text-[#D1D7E0]">{{auth()->check() ? "You are logged in":"Not logged in"}}</h1>
     @auth
 
@@ -31,6 +23,4 @@
             View All Tasks
         </a>
     </div>
-</body>
-
-</html>
+@endsection
