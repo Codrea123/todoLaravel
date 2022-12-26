@@ -29,14 +29,5 @@
     </div>
 </div>
 <script>
-    let toggle = document.querySelector('.toggle');
-    let modal = document.querySelector('.modal');
-    let close = document.querySelector('.close');
-    toggle.addEventListener('click', function () {
-        modal.classList.toggle('hidden');
-    });
-    close.addEventListener('click', function () {
-        modal.classList.toggle('hidden');
-    });
 
 </script>

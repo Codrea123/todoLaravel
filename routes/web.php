@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SubTaskController;
 use App\Http\Controllers\TaskController;
 use App\Http\Controllers\VendorController;
@@ -48,6 +49,9 @@ Route::middleware('auth')->group(function () {
         Route::post('update/{category}',[CategoryController::class, 'update'])->name('categories.update');
         Route::delete('delete/{category}',[CategoryController::class, 'destroy'])->name('categories.destroy');
     });
+
+    Route::put('profile/update',[ProfileController::class, 'update'])->name('profile.update');
+    Route::get('profile',[ProfileController::class, 'index'])->name('profile.index');
 
 });
 Auth::routes();

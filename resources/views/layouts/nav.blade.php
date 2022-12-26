@@ -63,11 +63,22 @@
 
                 <li>
                     @auth
-                        <p>{{auth()->user()->name}}</p>
+                        <a href="{{route('profile.index')}}">
+                        <p class="inline-block no-underline hover:text-black hover:underline py-2 px-4">{{auth()->user()->name}}</p>
+                        </a>
                     @endauth
                     @guest
                         <a class="md:p-4 py-2 block hover:text-purple-400" href="{{route('login')}}">Log in</a>
                     @endguest
+                </li>
+
+                <li>
+                    @auth
+                        <form action="{{route('logout')}}" method="POST">
+                            @csrf
+                            <button type="submit" class="inline-block no-underline hover:text-black hover:underline py-2 px-4">Log out</button>
+                        </form>
+                    @endauth
                 </li>
             </ul>
         </div>

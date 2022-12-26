@@ -13,7 +13,8 @@
         <ul class="grid grid-cols-3 gap-2">
 
             @foreach($tasks as $task)
-                <div class="{{$task->completed ?'bg-green-500':'bg-[#D1D7E0]'}} mx-6 drop-shadow-lg rounded-lg">
+                <div class="{{$task->completed ?'bg-green-500':'bg-[#D1D7E0]'}} mx-6 drop-shadow-lg rounded-lg task">
+                    <input class="h-0 w-0 task-id" type="hidden" name="task_id" value="{{$task->id}}">
                     <a href="{{route('tasks.edit',['task'=>$task])}}" class="absolute mx-2 my-2">
                         <img src="{{asset('/images/edit-button.png')}}" alt="Edit" class="w-8 h-8">
                     </a>
@@ -45,7 +46,6 @@
                                 </div>
                             @endforeach
                         </div>
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded toggle">Add subtask</button>
 
                         <div class="grid grid-cols-2 gap-16">
                             <form action="{{route('tasks.destroy',['task'=>$task])}}" method="post">
@@ -64,8 +64,12 @@
                                 <input class="w-0 h-0" type="hidden" name="completed" value="{{$task->completed ? 0:1}}">
                             </form>
                         </div>
+
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded toggle">Add subtask</button>
+
+
                         <label for="category_id">Category:</label><br>
-                            <select name="category_id" id="category_id" class="category-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg mb-4">
+                            <select name="category_id" id="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg mb-4 category-select">
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}" {{$task->category?->id == $category->id ? "selected" : " "}}>{{$category->name}}</option>
                                 @endforeach
@@ -73,30 +77,57 @@
                     </div>
                 </div>
             @endforeach
+            @foreach($tasks as $task)
+                    @include('partials.modals.add_subtask_modal')
+            @endforeach
         </ul>
     </div>
-    @include('partials.modals.add_subtask_modal')
-
 @endsection
 <script>
 
-    document.addEventListener('DOMContentLoaded',function (){
-        document.querySelector('.category-select').addEventListener('change', (e) => {
-            const task_id = e.target.parentNode.parentNode.parentNode.querySelector('input[name="task_id"]').value
-            fetch('/tasks/change-category/' + task_id, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({
-                    category_id: e.target.value,
 
-                })
-            }).then(res => res.json())
-                .then(data => console.log(data))
-        });
+    document.addEventListener('DOMContentLoaded',function (){
+        //get all the buttons
+        let buttons = document.querySelectorAll('.toggle');
+        //get all the modals
+        let modals = document.querySelectorAll('.modal');
+        //get all the close buttons
+        let closeButtons = document.querySelectorAll('.close');
+        //get all the tasks
+        let tasks = document.querySelectorAll('.task');
+        //loop through the buttons
+        buttons.forEach((button, i) => {
+            button.addEventListener('click', () => {
+                modals[i].classList.toggle('hidden');
+            })
+        })
+        closeButtons.forEach((button, i) => {
+            button.addEventListener('click', () => {
+                modals[i].classList.toggle('hidden');
+            })
+        })
+
+        tasks.forEach((task, i) => {
+            task.querySelector('.category-select').addEventListener('change', (e) => {
+                    let task_id = task.querySelector('.task-id').value;
+                    console.log(task_id);
+                    fetch('/tasks/change-category/' + task_id, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+                        },
+                        body: JSON.stringify({
+                            category_id: e.target.value,
+
+                        })
+                    }).then(res => res.json())
+                        .then(data => console.log(data))
+                });
+        })
+
+
     });
 
 
