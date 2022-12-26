@@ -54,6 +54,7 @@ class User extends Authenticatable
         return Task::with('user')->where('user_id', $this->id)->where('completed', 0)->get()->count();
     }
 
+
     public function categories(){
         return $this->hasMany(Category::class);
     }

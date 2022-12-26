@@ -65,7 +65,7 @@
                             </form>
                         </div>
                         <label for="category_id">Category:</label><br>
-                            <select name="category_id" id="category_id" class="category-select">
+                            <select name="category_id" id="category_id" class="category-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg mb-4">
                                 @foreach($categories as $category)
                                     <option value="{{$category->id}}" {{$task->category?->id == $category->id ? "selected" : " "}}>{{$category->name}}</option>
                                 @endforeach

@@ -32,6 +32,13 @@
                                                 {{$category->tasks ? $category->tasks->count() : '0'}} Tasks
                                             </p>
                                         </a>
+                                    <div class="flex flex-column">
+                                        <ul>
+                                            @foreach($category->tasks as $task)
+                                                <li>{{$task->description}}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
                                     </footer>
                                 </article>
                             </div>
