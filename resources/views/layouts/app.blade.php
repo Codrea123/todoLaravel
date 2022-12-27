@@ -20,8 +20,7 @@
     <div id="app">
         @include('layouts.nav')
 
-
-        <main class="py-4">
+        <main class="my-6">
             @yield('content')
         </main>
     </div>

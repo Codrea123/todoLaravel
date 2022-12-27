@@ -12,7 +12,7 @@
         </h1>
         <ul class="grid grid-cols-3 gap-2">
 
-            @foreach($tasks as $task)
+            @forelse($tasks as $task)
                 <div class="{{$task->completed ?'bg-green-500':'bg-[#D1D7E0]'}} mx-6 drop-shadow-lg rounded-lg task">
                     <input class="h-0 w-0 task-id" type="hidden" name="task_id" value="{{$task->id}}">
                     <a href="{{route('tasks.edit',['task'=>$task])}}" class="absolute mx-2 my-2">
@@ -47,6 +47,17 @@
                             @endforeach
                         </div>
 
+                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded toggle">Add subtask</button>
+
+
+                        <label for="category_id">Category:</label><br>
+                        <select name="category_id" id="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg mb-4 category-select">
+                            <option value="">Selecteaza o categorie</option>
+                            @foreach($categories as $category)
+                                <option value="{{$category->id}}" {{$task->category?->id == $category->id ? "selected" : " "}}>{{$category->name}}</option>
+                            @endforeach
+                        </select>
+
                         <div class="grid grid-cols-2 gap-16">
                             <form action="{{route('tasks.destroy',['task'=>$task])}}" method="post">
                                 @csrf
@@ -65,18 +76,16 @@
                             </form>
                         </div>
 
-                        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded toggle">Add subtask</button>
-
-
-                        <label for="category_id">Category:</label><br>
-                            <select name="category_id" id="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg mb-4 category-select">
-                                @foreach($categories as $category)
-                                    <option value="{{$category->id}}" {{$task->category?->id == $category->id ? "selected" : " "}}>{{$category->name}}</option>
-                                @endforeach
-                            </select>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <div>
+                    <p>
+                        No tasks found
+                    </p>
+                </div>
+
+            @endforelse
             @foreach($tasks as $task)
                     @include('partials.modals.add_subtask_modal')
             @endforeach
@@ -123,7 +132,7 @@
 
                         })
                     }).then(res => res.json())
-                        .then(data => console.log(data))
+                        .then(data => window.location.reload())
                 });
         })
 

@@ -39,32 +39,35 @@
                 flex-row
                 flex
                 items-center
-              pt-4
-              text-base text-gray-700
-              md:pt-0"
+                p-4
+                text-base text-gray-700
+                md:pt-0
+                "
             >
                 <li>
                     <a
-                        class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                        class="md:p-4 py-2 block hover:text-purple-400"
                         href="{{route('categories.index')}}"
                     >Categories</a
                     >
                 </li>
                 <li>
                     <a
-                        class="inline-block no-underline hover:text-black hover:underline py-2 px-4"
+                        class="md:p-4 py-2 block hover:text-purple-400"
                         href="{{route('tasks.index')}}"
                     >Tasks</a
                     >
                 </li>
                 <li>
-                    <a class="md:p-4 py-2 block hover:text-purple-400" href="{{route('tasks.create')}}"> + </a>
+                    <a class="md:p-4 py-2 block hover:text-purple-400" href="{{route('tasks.create')}}">
+                    Create Task
+                    </a>
                 </li>
 
                 <li>
                     @auth
-                        <a href="{{route('profile.index')}}">
-                        <p class="inline-block no-underline hover:text-black hover:underline py-2 px-4">{{auth()->user()->name}}</p>
+                        <a class="md:p-4 py-2 block hover:text-purple-400" href="{{route('profile.index')}}">
+                        {{auth()->user()->name}}
                         </a>
                     @endauth
                     @guest
@@ -76,7 +79,7 @@
                     @auth
                         <form action="{{route('logout')}}" method="POST">
                             @csrf
-                            <button type="submit" class="inline-block no-underline hover:text-black hover:underline py-2 px-4">Log out</button>
+                            <button class="md:p-4 py-2 block hover:text-purple-400 span">Log out</button>
                         </form>
                     @endauth
                 </li>
