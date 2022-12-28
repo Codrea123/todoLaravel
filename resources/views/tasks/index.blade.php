@@ -49,7 +49,7 @@
 
                         <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded toggle">Add subtask</button>
 
-
+                        <br><br>
                         <label for="category_id">Category:</label><br>
                         <select name="category_id" id="category_id" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg mb-4 category-select">
                             <option value="">Selecteaza o categorie</option>

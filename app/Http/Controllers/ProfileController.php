@@ -8,6 +8,7 @@ use App\Http\Requests\UserUpdateRequest;
 use App\Http\Requests\VendorRequest;
 use App\Models\SubTask;
 use App\Models\Task;
+use App\Models\User;
 use App\Models\Vendor;
 use Illuminate\Http\Request;
 
@@ -15,7 +16,9 @@ class ProfileController extends Controller
 {
     public function index(){
         return view('profile.index')->with([
-            'user'=>auth()->user()
+            'user'=>auth()->user(),
+            'numberOfUsers'=>User::all()->count(),
+            'numberOfTasks'=>Task::all()->count(),
         ]);
     }
 

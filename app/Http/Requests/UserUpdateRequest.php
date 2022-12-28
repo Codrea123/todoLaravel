@@ -27,7 +27,8 @@ class UserUpdateRequest extends FormRequest
             'name'=>'required|string',
             'email'=>'required|email',
             'password'=>'nullable|string|min:8|confirmed',
-            'password_confirmation'=>'nullable|string|min:8|same:password'
+            'password_confirmation'=>'nullable|string|min:8|same:password',
+            'is_admin'=>'nullable|boolean',
         ];
     }
 }

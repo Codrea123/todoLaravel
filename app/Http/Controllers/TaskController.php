@@ -36,7 +36,9 @@ class TaskController extends Controller
 
 
     public function create(){
-        return view('tasks.create');
+        return view('tasks.create')->with([
+            'categories'=>Auth::user()->categories,
+        ]);
     }
 
     public function store(TaskRequest $request){
@@ -45,6 +47,7 @@ class TaskController extends Controller
         $task->title = $request->get('title');
         $task->description = $request->get('description');
         $task->reminder = $request->get('reminder');
+        $task->category_id = $request->get('category_id');
         $task->save();
         return redirect()->route('tasks.index');
     }

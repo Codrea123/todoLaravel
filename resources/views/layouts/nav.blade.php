@@ -66,7 +66,7 @@
 
                 <li>
                     @auth
-                        <a class="md:p-4 py-2 block hover:text-purple-400" href="{{route('profile.index')}}">
+                        <a class="md:p-4 py-2 block hover:text-purple-400 {{auth()->user()->is_admin ? 'text-red-500':''}}" href="{{route('profile.index')}}">
                         {{auth()->user()->name}}
                         </a>
                     @endauth

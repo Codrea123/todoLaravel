@@ -43,11 +43,15 @@ class TaskRequest extends FormRequest
                     return $this->get('toggle') == null;
                 })
             ],
+            'category_id'=>[
+                'int',
+                'nullable',
+            ],
             'reminder'=>[
-                'date'
+                'date',
             ],
             'completed'=>[
-                'boolean'
+                'boolean',
             ]
         ];
     }

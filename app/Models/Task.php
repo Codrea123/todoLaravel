@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Observers\TaskObserver;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Carbon;
 
 class Task extends Model
 {
@@ -31,5 +32,9 @@ class Task extends Model
 
     public function category() {
         return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function shouldSendReminder() {
+        return Carbon::parse($this->reminder)->isToday() && !$this->completed;
     }
 }
